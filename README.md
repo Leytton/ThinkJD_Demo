@@ -1,5 +1,7 @@
 # ThinkJD_Demo
 
+这是ThinkJD的测试项目
+
 This is the demo of ThinkJD(ThinkJDBC) https://github.com/Leytton/ThinkJD
 
 # ThinkJD
