@@ -24,26 +24,37 @@ public class ThinkJDUnitTest {
 	public void testSelect() throws SQLException {
 			//select id,name,weight from jd_user where id>3
 			List<User> res = new M("user").field("id,name,weight").where("id>3").select(User.class);
-			System.out.println(JSON.toJSON(res));
+			//System.out.println(JSON.toJSON(res));
 			
 			//select sex,sum(weight) as weight,avg(age) as age,count(id) as num from jd_user where id>5 group by sex order by sex desc limit 0,10
 			res = new M("user").field("sex,sum(weight) as weight,avg(age) as age,count(id) as num").where("id>?",5).group("sex").order("sex desc").page(1, 10).select(User.class);
+			//System.out.println(JSON.toJSON(res));
+			
+			//select jd_user.id,name,weight,sum(gold) as num from jd_user left join jd_gold on user_id=jd_user.id where jd_user.id>3 group by jd_user.id
+			//res = new M("user").prefix("jd_").fetchSql(true).field("jd_user.id,name,weight,sum(gold) as num").join("left join jd_gold on user_id=jd_user.id").where("jd_user.id>3").group("jd_user.id").select(User.class);
+			res = new M("user").field("jd_user.id,name,weight,sum(gold) as num").join("left join jd_gold on user_id=jd_user.id").where("jd_user.id>3").group("jd_user.id").select(User.class);
+			//System.out.println(JSON.toJSON(res));
+			
+			res = new M("user").field("id,name").fetchSql(false).where("id=4").union("select id,name from jd_user where id<3",true)
+					.union("select id,name from jd_user where id=3",false).select(User.class);
 			System.out.println(JSON.toJSON(res));
 	}
 
 	@Test
-	public void testFindClassOfTLong() {
-		fail("Not yet implemented");
+	public void testFindClassOfTLong() throws SQLException {
+		User user=D.M("user").fetchSql(true).find(User.class,3);
+		System.out.println(JSON.toJSON(user));
 	}
 
 	@Test
-	public void testFindClassOfTStringObject() {
-		fail("Not yet implemented");
+	public void testFindClassOfTStringObject() throws SQLException {
+		User user=D.M("user").fetchSql(false).find(User.class,"name","Bob");
+		System.out.println(JSON.toJSON(user));
 	}
 
 	@Test
 	public void testFindClassOfT() throws SQLException{
-		User res = new M("user").field("id,name").where("id>?",4).order("id asc").find(User.class);
+		User res = new M("user").fetchSql(true).field("id,name").where("id>?",4).order("id asc").find(User.class);
 		System.out.println(JSON.toJSON(res));
 	}
 
@@ -132,5 +143,6 @@ public class ThinkJDUnitTest {
 	public void testGetField() {
 		fail("Not yet implemented");
 	}
-
+	
+	
 }
