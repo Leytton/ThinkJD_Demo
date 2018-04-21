@@ -17,14 +17,14 @@ public class ThinkJDTest {
 //		HikariConfig config = new HikariConfig("/hikari_debug.properties");
 //		HikariDataSource dataSource = new HikariDataSource(config);
 //		D.setDataSource(dataSource);
-		D.setDbConfig("jdbc:mysql://127.0.0.1:3306/thinkjdbc?useUnicode=true&characterEncoding=UTF-8","root","root");
+//		D.setDbConfig("jdbc:mysql://127.0.0.1:3306/thinkjdbc?useUnicode=true&characterEncoding=UTF-8","root","root");
 		D.setTablePrefix("jd_");
 		D.getVersion();
 //		long id=new M("user").field("name,weight,time","Tom",50,System.currentTimeMillis()/1000).add();
 //		System.out.println(id);
 //		id=new M("user").field("",null,"Bob",50,System.currentTimeMillis()/1000).add();
 //		System.out.println(id);
-		long num= (long) D.M("user").where("id<5").sum("name");
+		long num= (long) D.M("user").where("id<5").sum("age");
 		System.out.println("sum:"+num);
 //		add();
 //		delete();
