@@ -2,6 +2,7 @@ package com.llqqww.thinkjdbc.demo;
 
 import static org.junit.Assert.fail;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -144,5 +145,29 @@ public class ThinkJDUnitTest {
 		fail("Not yet implemented");
 	}
 	
+	@Test
+	public void testStartTrans(){
+		Connection conn=null;
+		try {
+			conn = D.M().startTrans();
+			long id=new M("gold").trans(conn).field("user_id,gold,type,time",3,5,0,System.currentTimeMillis()/1000).add();
+			System.out.println(id);
+			if(id>0) {
+				throw new SQLException("Transaction Rollback Test");
+			}
+			id=new M("gold").trans(conn).field("user_id,gold,type,time",3,5,0,System.currentTimeMillis()/1000).add();
+			System.out.println(id);
+			
+			D.M().commit(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				D.M().rollback(conn);
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		}
+		
+	}
 	
 }
