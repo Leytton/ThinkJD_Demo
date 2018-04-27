@@ -19,13 +19,21 @@ public class ThinkJDTest {
 //		D.setDataSource(dataSource);
 //		D.setDbConfig("jdbc:mysql://127.0.0.1:3306/thinkjdbc?useUnicode=true&characterEncoding=UTF-8","root","root");
 		D.setTablePrefix("jd_");
-		D.getVersion();
+//		D.getVersion();
 //		long id=new M("user").field("name,weight,time","Tom",50,System.currentTimeMillis()/1000).add();
 //		System.out.println(id);
 //		id=new M("user").field("",null,"Bob",50,System.currentTimeMillis()/1000).add();
 //		System.out.println(id);
-		long num= (long) D.M("user").where("id<5").sum("age");
-		System.out.println("sum:"+num);
+		User user = D.M(User.class).fetchSql(false).field("id,name,age").order("id desc").find("name","Tom");
+		System.out.println(JSON.toJSON(user));
+//		user=new User();
+		user.setAge(122);
+		D.M(User.class).fetchSql(false).find(10);
+		
+//		D.M(user).fetchSql(false).save();
+		D.M(user).fetchSql(true).add();
+		
+//		System.out.println(Integer.MAX_VALUE);
 //		add();
 //		delete();
 //		save();
@@ -47,9 +55,9 @@ public class ThinkJDTest {
 	
 	public static void add(){
 		try {
-			long id=new M("machine_event").fetchSql(false).field("machine_id,type,event,time",1111,5,"摄像头怎么了",System.currentTimeMillis()/1000).add();
+			long id=new M("machine_event").fetchSql(false).field("machine_id,type,event,time").data(1111,5,"摄像头怎么了",System.currentTimeMillis()/1000).add();
 			System.out.println(id);
-			id=new M("machine_event").fetchSql(false).field("",null,1111,5,"摄像头怎么了",System.currentTimeMillis()/1000).add();
+			id=new M("machine_event").fetchSql(false).data(null,1111,5,"摄像头怎么了",System.currentTimeMillis()/1000).add();
 			System.out.println(id);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -73,7 +81,7 @@ public class ThinkJDTest {
 	
 	public static void save(){
 		try {
-			long num=new M("machine_event").fetchSql(false).field("machine_id,type,event",1112,0,"机器上线").where("id=?",13434).save();
+			long num=new M("machine_event").fetchSql(false).field("machine_id,type,event").data(1112,0,"机器上线").where("id=?",13434).save();
 			System.out.println(num);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -86,7 +94,8 @@ public class ThinkJDTest {
 //			System.out.println(JSON.toJSON(res));
 //			Machine res1 = new M("machine").field("id,name").page(1, 9).find(Machine.class);
 //			System.out.println(JSON.toJSON(res1));
-			User res1 = new M("user").field("id,name").find(User.class);
+//			User res1 = new M("user").field("id,name").find(User.class);
+			User res1 = new M(User.class).field("id,name").find();
 			System.out.println(JSON.toJSON(res1));
 //			List<Machine> res3 = new M("gold_log").fetchSql(false).field("id,gold_type,type_name,gold_num").page(1, 9).order("id desc").select(Machine.class);
 //			System.out.println(JSON.toJSON(res3));

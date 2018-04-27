@@ -1,25 +1,35 @@
 package com.llqqww.thinkjdbc.demo;
 
+import com.llqqww.thinkjdbc.Column;
+
+//@Table(name="user")
 public class User {
 	
-	private long id;
-	private int age;
-	private String name;
-	private float weight;
-	private int sex;
-	private int num;
-	private long time;
+	@Column(isKey=true)
+	private Long id;
 	
-	public long getId() {
+	private Integer age;
+	
+//	@Column(name="user_name")
+	private String name;
+	private Float weight;
+	private Boolean sex;
+	
+	@Column(isColumn=false)
+	private Integer num;
+	
+	private Long time;
+	
+	public Long getId() {
 		return id;
 	}
-	public void setId(long id) {
-		this.id = id;
+	public void setId(Long i) {
+		this.id = i;
 	}
-	public int getAge() {
+	public Integer getAge() {
 		return age;
 	}
-	public void setAge(int age) {
+	public void setAge(Integer age) {
 		this.age = age;
 	}
 	public String getName() {
@@ -28,29 +38,31 @@ public class User {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public float getWeight() {
+	public Float getWeight() {
 		return weight;
 	}
-	public void setWeight(float weight) {
+	public void setWeight(Float weight) {
 		this.weight = weight;
 	}
-	public int getSex() {
+	public Boolean getSex() {
 		return sex;
 	}
-	public void setSex(int sex) {
+	public void setSex(Boolean sex) {
 		this.sex = sex;
 	}
-	public int getNum() {
+	public Integer getNum() {
 		return num;
 	}
-	public void setNum(int num) {
+	public void setNum(Integer num) {
 		this.num = num;
 	}
-	public long getTime() {
+	public Long getTime() {
 		return time;
 	}
-	public void setTime(long time) {
+	public void setTime(Long time) {
 		this.time = time;
 	}
+	
+	
 	
 }
