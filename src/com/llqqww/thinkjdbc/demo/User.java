@@ -2,15 +2,12 @@ package com.llqqww.thinkjdbc.demo;
 
 import com.llqqww.thinkjdbc.Column;
 
-//@Table(name="user")
+//@Table(name="user")默认类名为表名,可注解重定义
 public class User {
-	
-	@Column(isKey=true)
+	//@Column(isKey=true)默认id为主键、isAutoInc=true自增,可注解重定义
 	private Long id;
-	
 	private Integer age;
-	
-//	@Column(name="user_name")
+	//@Column(name="user_name")字段名可注解重定义
 	private String name;
 	private Float weight;
 	private Boolean sex;
@@ -23,8 +20,8 @@ public class User {
 	public Long getId() {
 		return id;
 	}
-	public void setId(Long i) {
-		this.id = i;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	public Integer getAge() {
 		return age;
@@ -62,7 +59,5 @@ public class User {
 	public void setTime(Long time) {
 		this.time = time;
 	}
-	
-	
 	
 }

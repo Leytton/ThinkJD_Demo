@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Properties;
 
 import com.alibaba.fastjson.JSON;
@@ -17,21 +18,60 @@ public class ThinkJDTest {
 //		HikariConfig config = new HikariConfig("/hikari_debug.properties");
 //		HikariDataSource dataSource = new HikariDataSource(config);
 //		D.setDataSource(dataSource);
-//		D.setDbConfig("jdbc:mysql://127.0.0.1:3306/thinkjdbc?useUnicode=true&characterEncoding=UTF-8","root","root");
+		//数据库配置(只需调用一次)
+		D.setDbConfig("jdbc:mysql://127.0.0.1:3306/thinkjdbc?useUnicode=true&characterEncoding=UTF-8","root","root");
+		//设置表前缀
 		D.setTablePrefix("jd_");
+		
+		//ThinkJDBC会根据JavaBean自动获取表名、主键、字段名和数据
+		//实例化JavaBean
+		User user = new User();
+		user.setId(5L);
+		user.setAge(10);
+		user.setName("Hello");
+		
+		//插入数据
+		long id=D.M(user).fetchSql(true).save();
+		System.out.println(id);
+		
+		//查询数据
+		user=D.M(User.class).find(id);
+		System.out.println(JSON.toJSON(user));//fastJson输出
+//
+//		//更新数据，不指定字段名默认更新JavaBean的所有非空属性
+		user.setSex(false);
+		long num=D.M(user).field("sex").save();
+		System.out.println(num);
+//
+//		//删除数据
+		num=D.M(user).delete();
+		System.out.println(num);
+//
+//		//table模式
+//		//插入数据
+		id=D.M("user").field("name,weight").data("Tom",60).add();
+//		//更新数据
+		D.M("user").field("name,weight").data("Tom",100).where("id=?",id).save();
+		//查询数据,必须要用class或者实例bean参数指定返回数据类型
+		user=D.M(User.class).find(7);
+		
+//		//删除数据
+		D.M("user").delete(id);
+		
+		
 //		D.getVersion();
 //		long id=new M("user").field("name,weight,time","Tom",50,System.currentTimeMillis()/1000).add();
 //		System.out.println(id);
 //		id=new M("user").field("",null,"Bob",50,System.currentTimeMillis()/1000).add();
 //		System.out.println(id);
-		User user = D.M(User.class).fetchSql(false).field("id,name,age").order("id desc").find("name","Tom");
-		System.out.println(JSON.toJSON(user));
+//		User user = D.M(User.class).fetchSql(false).field("id,name,age").order("id desc").find("name","Tom");
+//		System.out.println(JSON.toJSON(user));
 //		user=new User();
-		user.setAge(122);
-		D.M(User.class).fetchSql(false).find(10);
+//		user.setAge(122);
+//		D.M(User.class).fetchSql(false).find(10);
 		
 //		D.M(user).fetchSql(false).save();
-		D.M(user).fetchSql(true).add();
+//		D.M(user).fetchSql(true).add();
 		
 //		System.out.println(Integer.MAX_VALUE);
 //		add();

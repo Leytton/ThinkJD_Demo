@@ -124,12 +124,15 @@ public class ThinkJDUnitTest {
 			user.setAge(10);
 			user.setWeight(30F);
 			long id=new M(user).fetchSql(true).add();
+			
+//			D.M(User.class).fetchSql(true).field("name,weight").data("Tom",60).add();
+			id=D.M(User.class).fetchSql(true).data("Tom",60).add();
 //			System.out.println(id);
 //			long id=D.M(Gold.class).data(1,2,3,null).fetchSql(true).add();
 			System.out.println(id);
 			assert(id>0);
 		} catch (Exception e) {
-//			e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 
@@ -165,11 +168,11 @@ public class ThinkJDUnitTest {
 	@Test
 	public void testDelete() {
 		try {
-//			long num=D.M(User.class).fetchSql(true).delete(11);
+			long num=D.M("user").fetchSql(true).delete(11);
 //			long num=D.M(Gold.class).fetchSql(true).delete(11);
 			User user=new User();
 			user.setId(10L);
-			long num=D.M(user).fetchSql(true).delete();
+//			long num=D.M(user).fetchSql(true).delete();
 			System.out.println(num);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
