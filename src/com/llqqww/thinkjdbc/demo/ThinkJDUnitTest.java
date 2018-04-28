@@ -51,7 +51,7 @@ public class ThinkJDUnitTest {
 		try {
 			User user = D.M(User.class).fetchSql(false).find(10);
 			System.out.println(JSON.toJSON(user));
-			D.M(user).autoInc(false).fetchSql(true).where("name=?",user.getId()-1).save();
+			D.M(user).autoInc(false).fetchSql(true).field("name").where("name=?",user.getId()-1).save();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -141,9 +141,9 @@ public class ThinkJDUnitTest {
 			user.setAge(10);
 			user.setName("Hello");
 			user.setSex(true);
-//			long num=D.M(user).autoInc(false).where("id=?",999).fetchSql(true).save();
+			long num=D.M(user).autoInc(false).field("name,age").where("id=?",999).fetchSql(true).save();
 //			System.out.println(num);
-			long num=D.M(User.class).where("id=?",999).fetchSql(true).field("name").data("Tom").setInc("age",1).setInc("weight", 10).setDec("time", 10).save();
+//			long num=D.M(User.class).where("id=?",999).fetchSql(true).field("name").data("Tom").setInc("age",1).setInc("weight", 10).setDec("time", 10).save();
 			System.out.println(num);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
