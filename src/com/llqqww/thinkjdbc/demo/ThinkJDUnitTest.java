@@ -33,15 +33,15 @@ public class ThinkJDUnitTest {
 			System.out.println(JSON.toJSON(res));
 			
 			//select sex,sum(weight) as weight,avg(age) as age,count(id) as num from jd_user where id>5 group by sex order by sex desc limit 0,10
-			res = new M(User.class).fetchSql(true).field("sex,sum(weight) as weight,avg(age) as age,count(id) as num").where("id>?",5).group("sex").order("sex desc").page(1, 10).select();
-			//System.out.println(JSON.toJSON(res));
+			res = new M(User.class).fetchSql(false).field("sex,sum(weight) as weight,avg(age) as age,count(id) as num").where("id>?",5).group("sex").order("sex desc").page(1, 10).select();
+			System.out.println(JSON.toJSON(res));
 			
 			//select jd_user.id,name,weight,sum(gold) as num from jd_user left join jd_gold on user_id=jd_user.id where jd_user.id>3 group by jd_user.id
 			//res = new M("user").prefix("jd_").fetchSql(true).field("jd_user.id,name,weight,sum(gold) as num").join("left join jd_gold on user_id=jd_user.id").where("jd_user.id>3").group("jd_user.id").select(User.class);
-			res = new M(User.class).fetchSql(true).field("jd_user.id,name,weight,sum(gold) as num").join("left join jd_gold on user_id=jd_user.id").where("jd_user.id>3").group("jd_user.id").select();
-			//System.out.println(JSON.toJSON(res));
+			res = new M(User.class).fetchSql(false).field("jd_user.id,name,weight,sum(gold) as num").join("left join jd_gold on user_id=jd_user.id").where("jd_user.id>3").group("jd_user.id").select();
+			System.out.println(JSON.toJSON(res));
 			
-			res = new M(User.class).fetchSql(true).field("id,name").where("id=4").union("select id,name from jd_user where id<3",true)
+			res = new M(User.class).fetchSql(false).field("id,name").where("id=4").union("select id,name from jd_user where id<3",true)
 					.union("select id,name from jd_user where id=3",false).select();
 			System.out.println(JSON.toJSON(res));
 	}
@@ -51,7 +51,7 @@ public class ThinkJDUnitTest {
 		try {
 			User user = D.M(User.class).fetchSql(false).find(10);
 			System.out.println(JSON.toJSON(user));
-			D.M(user).autoInc(false).fetchSql(true).field("name").where("name=?",user.getId()-1).save();
+			D.M(user).autoInc(false).fetchSql(false).field("name").where("name=?",user.getId()-1).save();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -65,9 +65,15 @@ public class ThinkJDUnitTest {
 	}
 
 	@Test
-	public void testFindClass() throws SQLException{
-		User res = new M(User.class).fetchSql(true).field("id,name").where("id>?",4).order("time desc").asc("id").desc("age").find();
-		System.out.println(JSON.toJSON(res));
+	public void testFindClass(){
+		try {
+			User res = new M(User.class).fetchSql(false).field("id,name,weight").where("id>?",4).order("time desc").asc("id").desc("age").find();
+			System.out.println(JSON.toJSON(res));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	@Test
@@ -122,9 +128,8 @@ public class ThinkJDUnitTest {
 			user.setId(1L);
 			user.setName("Hello");
 			user.setAge(10);
-			user.setWeight(30F);
+//			user.setWeight(30F);
 			long id=new M(user).fetchSql(true).add();
-			
 //			D.M(User.class).fetchSql(true).field("name,weight").data("Tom",60).add();
 			id=D.M(User.class).fetchSql(true).data("Tom",60).add();
 //			System.out.println(id);
@@ -194,26 +199,26 @@ public class ThinkJDUnitTest {
 	public void testStartTrans(){
 		Connection conn=null;
 		try {
-			conn = D.M().startTrans();
-			Long id=new M("gold").trans(conn).fetchSql(false).field("user_id,gold,type,time").data(3,5,0,System.currentTimeMillis()/1000).add();
+			conn=D.getTransConnection();
+			Long id=new M("gold").fetchSql(false).field("user_id,gold,type,time").data(3,5,0,System.currentTimeMillis()/1000).add();
 			System.out.println(id);
 			Gold gold = new Gold();
 			gold.setUser_id(3L);
 			gold.setGold(5);
 			gold.setGold_type(0);
-			id=new M(gold).trans(conn).fetchSql(false).add();
+			id=new M(gold).fetchSql(false).add();
 			System.out.println(id);
 			if(id>=0) {
 				throw new SQLException("Transaction Rollback Test");
 			}
-			id=new M(Gold.class).trans(conn).fetchSql(false).field("user_id,gold,type,time").data(3,5,0,System.currentTimeMillis()/1000).add();
+			id=new M(Gold.class).fetchSql(false).field("user_id,gold,type,time").data(3,5,0,System.currentTimeMillis()/1000).add();
 			System.out.println(id);
 			
-			D.M().commit(conn);
+			D.commit(conn);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			try {
-				D.M().rollback(conn);
+				D.rollback(conn);
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}

@@ -2,14 +2,15 @@ package com.llqqww.thinkjdbc.demo;
 
 import com.llqqww.thinkjdbc.Column;
 
-//@Table(name="user")Ä¬ÈÏÀàÃûÎª±íÃû,¿É×¢½âÖØ¶¨Òå
+//@Table(name="user")Ä¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½×¢ï¿½ï¿½ï¿½Ø¶ï¿½ï¿½ï¿½
 public class User {
-	//@Column(isKey=true)Ä¬ÈÏidÎªÖ÷¼ü¡¢isAutoInc=true×ÔÔö,¿É×¢½âÖØ¶¨Òå
+	//@Column(isKey=true)Ä¬ï¿½ï¿½idÎªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½isAutoInc=trueï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½×¢ï¿½ï¿½ï¿½Ø¶ï¿½ï¿½ï¿½
 	private Long id;
 	private Integer age;
-	//@Column(name="user_name")×Ö¶ÎÃû¿É×¢½âÖØ¶¨Òå
+	//@Column(name="user_name")ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½×¢ï¿½ï¿½ï¿½Ø¶ï¿½ï¿½ï¿½
 	private String name;
-	private Float weight;
+	@Column(name="weight")
+	private Float remap_weight;
 	private Boolean sex;
 	
 	@Column(isColumn=false)
@@ -35,11 +36,11 @@ public class User {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Float getWeight() {
-		return weight;
+	public Float getRemap_weight() {
+		return remap_weight;
 	}
-	public void setWeight(Float weight) {
-		this.weight = weight;
+	public void setRemap_weight(Float remap_weight) {
+		this.remap_weight = remap_weight;
 	}
 	public Boolean getSex() {
 		return sex;

@@ -18,46 +18,84 @@ public class ThinkJDTest {
 //		HikariConfig config = new HikariConfig("/hikari_debug.properties");
 //		HikariDataSource dataSource = new HikariDataSource(config);
 //		D.setDataSource(dataSource);
-		//Êı¾İ¿âÅäÖÃ(Ö»Ğèµ÷ÓÃÒ»´Î)
+		//æ•°æ®åº“é…ç½®(åªéœ€è°ƒç”¨ä¸€æ¬¡)
 		D.setDbConfig("jdbc:mysql://127.0.0.1:3306/thinkjdbc?useUnicode=true&characterEncoding=UTF-8","root","root");
-		//ÉèÖÃ±íÇ°×º
+		//è®¾ç½®è¡¨å‰ç¼€
 		D.setTablePrefix("jd_");
 		
-		//ThinkJDBC»á¸ù¾İJavaBean×Ô¶¯»ñÈ¡±íÃû¡¢Ö÷¼ü¡¢×Ö¶ÎÃûºÍÊı¾İ
-		//ÊµÀı»¯JavaBean
+		D.setAutoClose(false);
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				Gold gold = new Gold();
+				gold.setUser_id(1L);
+				gold.setGold(5);
+				gold.setGold_type(0);
+				try {
+					D.M(gold).add();
+					D.M(gold).add();
+				} catch (SQLException e) {
+					D.closeConn();
+					e.printStackTrace();
+				}
+			}
+		}, "Thread_1").start();
+		
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				Gold gold = new Gold();
+				gold.setUser_id(2L);
+				gold.setGold(5);
+				gold.setGold_type(0);
+				try {
+					D.M(gold).add();
+					D.M(gold).add();
+				} catch (SQLException e) {
+					D.closeConn();
+					e.printStackTrace();
+				}
+			}
+		}, "Thread_2").start();
+
+/*		
+		//ThinkJDBCä¼šæ ¹æ®JavaBeanè‡ªåŠ¨è·å–è¡¨åã€ä¸»é”®ã€å­—æ®µåå’Œæ•°æ®
+		//å®ä¾‹åŒ–JavaBean
 		User user = new User();
 		user.setId(5L);
 		user.setAge(10);
 		user.setName("Hello");
 		
-		//²åÈëÊı¾İ
+		//æ’å…¥æ•°æ®
 		long id=D.M(user).fetchSql(true).save();
 		System.out.println(id);
 		
-		//²éÑ¯Êı¾İ
+		//æŸ¥è¯¢æ•°æ®
 		user=D.M(User.class).find(id);
-		System.out.println(JSON.toJSON(user));//fastJsonÊä³ö
+		System.out.println(JSON.toJSON(user));//fastJsonè¾“å‡º
 //
-//		//¸üĞÂÊı¾İ£¬²»Ö¸¶¨×Ö¶ÎÃûÄ¬ÈÏ¸üĞÂJavaBeanµÄËùÓĞ·Ç¿ÕÊôĞÔ
+//		//æ›´æ–°æ•°æ®ï¼Œä¸æŒ‡å®šå­—æ®µåé»˜è®¤æ›´æ–°JavaBeançš„æ‰€æœ‰éç©ºå±æ€§
 		user.setSex(false);
 		long num=D.M(user).field("sex").save();
 		System.out.println(num);
 //
-//		//É¾³ıÊı¾İ
+//		//åˆ é™¤æ•°æ®
 		num=D.M(user).delete();
 		System.out.println(num);
 //
-//		//tableÄ£Ê½
-//		//²åÈëÊı¾İ
+//		//tableæ¨¡å¼
+//		//æ’å…¥æ•°æ®
 		id=D.M("user").field("name,weight").data("Tom",60).add();
-//		//¸üĞÂÊı¾İ
+//		//æ›´æ–°æ•°æ®
 		D.M("user").field("name,weight").data("Tom",100).where("id=?",id).save();
-		//²éÑ¯Êı¾İ,±ØĞëÒªÓÃclass»òÕßÊµÀıbean²ÎÊıÖ¸¶¨·µ»ØÊı¾İÀàĞÍ
+		//æŸ¥è¯¢æ•°æ®,å¿…é¡»è¦ç”¨classæˆ–è€…å®ä¾‹beanå‚æ•°æŒ‡å®šè¿”å›æ•°æ®ç±»å‹
 		user=D.M(User.class).find(7);
 		
-//		//É¾³ıÊı¾İ
+//		//åˆ é™¤æ•°æ®
 		D.M("user").delete(id);
-		
+*/		
 		
 //		D.getVersion();
 //		long id=new M("user").field("name,weight,time","Tom",50,System.currentTimeMillis()/1000).add();
@@ -95,9 +133,9 @@ public class ThinkJDTest {
 	
 	public static void add(){
 		try {
-			long id=new M("machine_event").fetchSql(false).field("machine_id,type,event,time").data(1111,5,"ÉãÏñÍ·ÔõÃ´ÁË",System.currentTimeMillis()/1000).add();
+			long id=new M("machine_event").fetchSql(false).field("machine_id,type,event,time").data(1111,5,"æ‘„åƒå¤´æ€ä¹ˆäº†",System.currentTimeMillis()/1000).add();
 			System.out.println(id);
-			id=new M("machine_event").fetchSql(false).data(null,1111,5,"ÉãÏñÍ·ÔõÃ´ÁË",System.currentTimeMillis()/1000).add();
+			id=new M("machine_event").fetchSql(false).data(null,1111,5,"æ‘„åƒå¤´æ€ä¹ˆäº†",System.currentTimeMillis()/1000).add();
 			System.out.println(id);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -121,7 +159,7 @@ public class ThinkJDTest {
 	
 	public static void save(){
 		try {
-			long num=new M("machine_event").fetchSql(false).field("machine_id,type,event").data(1112,0,"»úÆ÷ÉÏÏß").where("id=?",13434).save();
+			long num=new M("machine_event").fetchSql(false).field("machine_id,type,event").data(1112,0,"æœºå™¨ä¸Šçº¿").where("id=?",13434).save();
 			System.out.println(num);
 		} catch (SQLException e) {
 			e.printStackTrace();
